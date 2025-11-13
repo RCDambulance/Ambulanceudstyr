@@ -1,1 +1,282 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ambulance – Interaktivt Inventar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+    }
+
+    header {
+      background: #004d66;
+      color: white;
+      padding: 1rem 1.5rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    header p {
+      margin: 0.3rem 0 0;
+      font-size: 0.95rem;
+    }
+
+    main {
+      padding: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .item-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .item-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .item-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .item-content {
+      padding: 0.75rem 0.9rem 1rem;
+    }
+
+    .item-title {
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .item-short {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    /* Modal */
+    .modal {
+      display: none; /* skjult som udgangspunkt */
+      position: fixed;
+      z-index: 999;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-inner {
+      background: white;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      border-radius: 10px;
+      overflow: auto;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+      position: relative;
+    }
+
+    .modal-header {
+      padding: 1rem 1.2rem 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .modal-body {
+      padding: 1rem 1.2rem 1.2rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .modal-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .modal-section-title {
+      font-weight: 600;
+      margin-top: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.9rem;
+      font-size: 1.6rem;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .modal-close:hover {
+      color: #000;
+    }
+
+    @media (min-width: 700px) {
+      .modal-body {
+        grid-template-columns: 1.1fr 1.2fr;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ambulancens inventar</h1>
+    <p>Klik på et stykke udstyr for at se billede, beskrivelse og brug.</p>
+  </header>
+
+  <main>
+    <div class="grid">
+
+      <!-- EKSEMPEL 1: Spineboard -->
+      <article class="item-card"
+        data-title="Spineboard"
+        data-image="images/spineboard.jpg"
+        data-description="Spineboard bruges primært til immobilisering og transport af traumepatienter, hvor der er mistanke om ryg- eller nakkeskade."
+        data-use="• Primært til tidskritisk frigørelse og transport.<br>
+                  • Brug sammen med halskrave og stropper efter lokale retningslinjer.<br>
+                  • Tænk altid på risiko for trykskader ved længerevarende brug.">
+        <img src="images/spineboard.jpg" alt="Spineboard">
+        <div class="item-content">
+          <div class="item-title">Spineboard</div>
+          <div class="item-short">Immobilisering ved traumer.</div>
+        </div>
+      </article>
+
+      <!-- EKSEMPEL 2: Bærebåre -->
+      <article class="item-card"
+        data-title="Bærebåre"
+        data-image="images/baerebaare.jpg"
+        data-description="Standard båre til liggende transport af patienter i ambulancen."
+        data-use="• Justér højde efter arbejdsmiljø og sikker løfteteknik.<br>
+                  • Fastgør patient med seler under kørsel.<br>
+                  • Kan kombineres med vakuummadras ved behov for immobilisering.">
+        <img src="images/baerebaare.jpg" alt="Bærebåre">
+        <div class="item-content">
+          <div class="item-title">Bærebåre</div>
+          <div class="item-short">Standard båre til liggende transport.</div>
+        </div>
+      </article>
+
+      <!-- EKSEMPEL 3: Vakuummadras -->
+      <article class="item-card"
+        data-title="Vakuummadras"
+        data-image="images/vakuummadras.jpg"
+        data-description="Vakuummadrassen former sig efter patientens krop og giver smerteaflastende og stabil immobilisering."
+        data-use="• Bruges ved mistanke om frakturer/rygskade og behov for komfortabel immobilisering.<br>
+                  • Sørg for korrekt sug til der ikke kan trykkes hulrum frem.<br>
+                  • Kontroller trykket løbende under transport.">
+        <img src="images/vakuummadras.jpg" alt="Vakuummadras">
+        <div class="item-content">
+          <div class="item-title">Vakuummadras</div>
+          <div class="item-short">Formstøbt, smerteaflastende immobilisering.</div>
+        </div>
+      </article>
+
+      <!-- HER KAN DU KOPIERE FLERE <article> BLOKKE TIL MERE UDSTYR -->
+
+    </div>
+  </main>
+
+  <!-- Modal (popup) -->
+  <div class="modal" id="itemModal" aria-hidden="true">
+    <div class="modal-inner">
+      <button class="modal-close" id="modalClose" aria-label="Luk">×</button>
+      <div class="modal-header">
+        <h2 id="modalTitle"></h2>
+      </div>
+      <div class="modal-body">
+        <div>
+          <img id="modalImage" class="modal-image" alt="" />
+        </div>
+        <div>
+          <div class="modal-section-title">Beskrivelse</div>
+          <p id="modalDescription"></p>
+
+          <div class="modal-section-title">Brug / pointer til eleverne</div>
+          <p id="modalUse"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll(".item-card");
+    const modal = document.getElementById("itemModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalImage = document.getElementById("modalImage");
+    const modalDescription = document.getElementById("modalDescription");
+    const modalUse = document.getElementById("modalUse");
+    const modalClose = document.getElementById("modalClose");
+
+    cards.forEach(card => {
+      card.addEventListener("click", () => {
+        modalTitle.textContent = card.dataset.title;
+        modalImage.src = card.dataset.image;
+        modalImage.alt = card.dataset.title;
+        modalDescription.textContent = card.dataset.description;
+        modalUse.innerHTML = card.dataset.use;
+
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    function closeModal() {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    modalClose.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && modal.classList.contains("open")) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
 
