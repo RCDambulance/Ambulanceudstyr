@@ -280,6 +280,19 @@
     const modalUse = document.getElementById("modalUse");
     const modalClose = document.getElementById("modalClose");
 
+    // Sortér kort alfabetisk efter titel (dansk rækkefølge)
+const grid = document.querySelector(".grid");
+const cardArray = Array.from(cards);
+
+cardArray.sort((a, b) => {
+  return a.dataset.title.localeCompare(b.dataset.title, "da", { sensitivity: "base" });
+});
+
+// Læg dem tilbage i grid i sorteret rækkefølge
+cardArray.forEach(card => grid.appendChild(card));
+
+    
+
     cards.forEach(card => {
       card.addEventListener("click", () => {
         modalTitle.textContent = card.dataset.title;
