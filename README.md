@@ -32,16 +32,4 @@ kan variere afhængigt af fabrikat, årgang og operatørens indkøbspolitik.
 
 Alle eksempler i dette projekt skal derfor ses som *illustrationer*, ikke som fuldstændigt dækkende eller fabrikant-specifik dokumentation.
 
----
-
-## 📂 Projektstruktur
-- **/images** – billeder af udstyret  
-- **index.html** – hovedsiden med interaktiv oversigt  
-- Eventuelle produktunderkategorier efter behov
-
----
-
-## 📘 Kontakt / Bidrag
-Projektet er udviklet til undervisningsbrug.  
-Ønsker du at bidrage med forbedringer, opdatere billeder eller tilføje flere produkter, kan du oprette en pull request eller foreslå ændringer via GitHub.
 
