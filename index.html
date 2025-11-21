@@ -352,7 +352,7 @@
     </div>
   </div>
 
-  <script>
+    <script>
     const cards = document.querySelectorAll(".item-card");
     const modal = document.getElementById("itemModal");
     const modalTitle = document.getElementById("modalTitle");
@@ -362,18 +362,17 @@
     const modalClose = document.getElementById("modalClose");
 
     // Sortér kort alfabetisk efter titel (dansk rækkefølge)
-const grid = document.querySelector(".grid");
-const cardArray = Array.from(cards);
+    const grid = document.querySelector(".grid");
+    const cardArray = Array.from(cards);
 
-cardArray.sort((a, b) => {
-  return a.dataset.title.localeCompare(b.dataset.title, "da", { sensitivity: "base" });
-});
+    cardArray.sort((a, b) => {
+      return a.dataset.title.localeCompare(b.dataset.title, "da", { sensitivity: "base" });
+    });
 
-// Læg dem tilbage i grid i sorteret rækkefølge
-cardArray.forEach(card => grid.appendChild(card));
+    // Læg dem tilbage i grid i sorteret rækkefølge
+    cardArray.forEach(card => grid.appendChild(card));
 
-    
-
+    // Håndtering af udstyrs-modal
     cards.forEach(card => {
       card.addEventListener("click", () => {
         modalTitle.textContent = card.dataset.title;
@@ -405,7 +404,57 @@ cardArray.forEach(card => grid.appendChild(card));
         closeModal();
       }
     });
+
+    // ===============================
+    // NYT: Ansvarsfraskrivelses-popup
+    // ===============================
+
+    const disclaimerModal = document.getElementById("disclaimerModal");
+    const openDisclaimerLink = document.getElementById("openDisclaimer");
+    const closeDisclaimerBtn = document.getElementById("closeDisclaimer");
+
+    // Åbn disclaimer, når man klikker på linket i headeren
+    if (openDisclaimerLink && disclaimerModal) {
+      openDisclaimerLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        disclaimerModal.classList.add("open");
+        disclaimerModal.setAttribute("aria-hidden", "false");
+      });
+    }
+
+    // Luk disclaimer og markér den som "set"
+    function closeDisclaimer() {
+      if (!disclaimerModal) return;
+      disclaimerModal.classList.remove("open");
+      disclaimerModal.setAttribute("aria-hidden", "true");
+      // Husk at brugeren har set den
+      localStorage.setItem("disclaimerSeen", "true");
+    }
+
+    if (closeDisclaimerBtn) {
+      closeDisclaimerBtn.addEventListener("click", closeDisclaimer);
+    }
+
+    // Luk hvis man klikker udenfor boksen
+    if (disclaimerModal) {
+      disclaimerModal.addEventListener("click", function (event) {
+        if (event.target === disclaimerModal) {
+          closeDisclaimer();
+        }
+      });
+    }
+
+    // Vis automatisk første gang brugeren besøger siden
+    window.addEventListener("load", function () {
+      const hasSeenDisclaimer = localStorage.getItem("disclaimerSeen");
+
+      if (!hasSeenDisclaimer && disclaimerModal) {
+        disclaimerModal.classList.add("open");
+        disclaimerModal.setAttribute("aria-hidden", "false");
+      }
+    });
   </script>
+
 </body>
 </html>
 
