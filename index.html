@@ -562,10 +562,11 @@
   </div>
 
 <script>
-  // Alle kort
+  // Hent alle kort og grid-container
   const grid = document.querySelector(".grid");
   const cards = Array.from(document.querySelectorAll(".item-card"));
 
+  // Modal til udstyret
   const modal = document.getElementById("itemModal");
   const modalTitle = document.getElementById("modalTitle");
   const modalImage = document.getElementById("modalImage");
@@ -617,6 +618,35 @@
   });
 
   // ===============================
+  // SØGNING I KORTENE
+  // ===============================
+
+  const searchInput = document.getElementById("searchInput");
+
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      const query = this.value.toLowerCase().trim();
+
+      cards.forEach(card => {
+        const titleText = card.querySelector(".item-title").textContent.toLowerCase();
+        const shortText = card.querySelector(".item-short").textContent.toLowerCase();
+        const dataDescription = (card.dataset.description || "").toLowerCase();
+
+        // Hvis søgeteksten findes i titel, kort tekst eller beskrivelse → vis kortet
+        if (
+          titleText.includes(query) ||
+          shortText.includes(query) ||
+          dataDescription.includes(query)
+        ) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  }
+
+  // ===============================
   // Ansvarsfraskrivelses-popup
   // ===============================
 
@@ -665,6 +695,7 @@
     }
   });
 </script>
+
 
 
 
