@@ -561,122 +561,112 @@
     </div>
   </div>
 
-
-    <script>
-    const cards = document.querySelectorAll(".item-card");
-    const modal = document.getElementById("itemModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalImage = document.getElementById("modalImage");
-    const modalDescription = document.getElementById("modalDescription");
-    const modalUse = document.getElementById("modalUse");
-    const modalClose = document.getElementById("modalClose");
-
-    // Sortér kort alfabetisk efter titel (dansk rækkefølge)
-    const grid = document.querySelector(".grid");
-    const cardArray = Array.from(cards);
-
-    cardArray.sort((a, b) => {
-      return a.dataset.title.localeCompare(b.dataset.title, "da", { sensitivity: "base" });
-    });
-
-    // Læg dem tilbage i grid i sorteret rækkefølge
-    cardArray.forEach(card => grid.appendChild(card));
-
-    // Håndtering af udstyrs-modal
-    cards.forEach(card => {
-      card.addEventListener("click", () => {
-        modalTitle.textContent = card.dataset.title;
-        modalImage.src = card.dataset.image;
-        modalImage.alt = card.dataset.title;
-        modalDescription.textContent = card.dataset.description;
-        modalUse.innerHTML = card.dataset.use;
-
-        modal.classList.add("open");
-        modal.setAttribute("aria-hidden", "false");
-      });
-    });
-
-    function closeModal() {
-      modal.classList.remove("open");
-      modal.setAttribute("aria-hidden", "true");
-    }
-
-    modalClose.addEventListener("click", closeModal);
-
-    modal.addEventListener("click", (event) => {
-      if (event.target === modal) {
-        closeModal();
-      }
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && modal.classList.contains("open")) {
-        closeModal();
-      }
-    });
-
-    // ===============================
-    // NYT: Ansvarsfraskrivelses-popup
-    // ===============================
-
-    const disclaimerModal = document.getElementById("disclaimerModal");
-    const openDisclaimerLink = document.getElementById("openDisclaimer");
-    const closeDisclaimerBtn = document.getElementById("closeDisclaimer");
-
-    // Åbn disclaimer, når man klikker på linket i headeren
-    if (openDisclaimerLink && disclaimerModal) {
-      openDisclaimerLink.addEventListener("click", function (event) {
-        event.preventDefault();
-        disclaimerModal.classList.add("open");
-        disclaimerModal.setAttribute("aria-hidden", "false");
-      });
-    }
-
-    // Luk disclaimer og markér den som "set"
-    function closeDisclaimer() {
-      if (!disclaimerModal) return;
-      disclaimerModal.classList.remove("open");
-      disclaimerModal.setAttribute("aria-hidden", "true");
-      // Husk at brugeren har set den
-      localStorage.setItem("disclaimerSeen", "true");
-    }
-
-    if (closeDisclaimerBtn) {
-      closeDisclaimerBtn.addEventListener("click", closeDisclaimer);
-    }
-
-    // Luk hvis man klikker udenfor boksen
-    if (disclaimerModal) {
-      disclaimerModal.addEventListener("click", function (event) {
-        if (event.target === disclaimerModal) {
-          closeDisclaimer();
-        }
-      });
-    }
-
-    // Vis automatisk første gang brugeren besøger siden
-    window.addEventListener("load", function () {
-      const hasSeenDisclaimer = localStorage.getItem("disclaimerSeen");
-
-      if (!hasSeenDisclaimer && disclaimerModal) {
-        disclaimerModal.classList.add("open");
-        disclaimerModal.setAttribute("aria-hidden", "false");
-      }
-    });
-  </script>
-<footer style="
-  text-align: center;
-  padding: 1rem;
-  margin-top: 2rem;
-  color: #666;
-  font-size: 0.85rem;
-">
-  © <span id="year"></span> JJBY@rybners.dk – Alle rettigheder forbeholdes
-</footer>
-
 <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+  // Alle kort
+  const grid = document.querySelector(".grid");
+  const cards = Array.from(document.querySelectorAll(".item-card"));
+
+  const modal = document.getElementById("itemModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalImage = document.getElementById("modalImage");
+  const modalDescription = document.getElementById("modalDescription");
+  const modalUse = document.getElementById("modalUse");
+  const modalClose = document.getElementById("modalClose");
+
+  // SORTÉR KORT ALFABETISK EFTER DEN SYNLIGE TITEL (.item-title)
+  cards.sort((a, b) => {
+    const aTitle = a.querySelector(".item-title").textContent.trim();
+    const bTitle = b.querySelector(".item-title").textContent.trim();
+    return aTitle.localeCompare(bTitle, "da", { sensitivity: "base" });
+  });
+
+  // Læg dem tilbage i grid i sorteret rækkefølge
+  cards.forEach(card => grid.appendChild(card));
+
+  // Håndtering af udstyrs-modal
+  cards.forEach(card => {
+    card.addEventListener("click", () => {
+      modalTitle.textContent = card.dataset.title;
+      modalImage.src = card.dataset.image;
+      modalImage.alt = card.dataset.title;
+      modalDescription.textContent = card.dataset.description;
+      modalUse.innerHTML = card.dataset.use;
+
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+    });
+  });
+
+  function closeModal() {
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+  }
+
+  modalClose.addEventListener("click", closeModal);
+
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.classList.contains("open")) {
+      closeModal();
+    }
+  });
+
+  // ===============================
+  // Ansvarsfraskrivelses-popup
+  // ===============================
+
+  const disclaimerModal = document.getElementById("disclaimerModal");
+  const openDisclaimerLink = document.getElementById("openDisclaimer");
+  const closeDisclaimerBtn = document.getElementById("closeDisclaimer");
+
+  // Åbn disclaimer, når man klikker på linket i headeren
+  if (openDisclaimerLink && disclaimerModal) {
+    openDisclaimerLink.addEventListener("click", function (event) {
+      event.preventDefault();
+      disclaimerModal.classList.add("open");
+      disclaimerModal.setAttribute("aria-hidden", "false");
+    });
+  }
+
+  // Luk disclaimer og markér den som "set"
+  function closeDisclaimer() {
+    if (!disclaimerModal) return;
+    disclaimerModal.classList.remove("open");
+    disclaimerModal.setAttribute("aria-hidden", "true");
+    // Husk at brugeren har set den
+    localStorage.setItem("disclaimerSeen", "true");
+  }
+
+  if (closeDisclaimerBtn) {
+    closeDisclaimerBtn.addEventListener("click", closeDisclaimer);
+  }
+
+  // Luk hvis man klikker udenfor boksen
+  if (disclaimerModal) {
+    disclaimerModal.addEventListener("click", function (event) {
+      if (event.target === disclaimerModal) {
+        closeDisclaimer();
+      }
+    });
+  }
+
+  // Vis automatisk første gang brugeren besøger siden
+  window.addEventListener("load", function () {
+    const hasSeenDisclaimer = localStorage.getItem("disclaimerSeen");
+
+    if (!hasSeenDisclaimer && disclaimerModal) {
+      disclaimerModal.classList.add("open");
+      disclaimerModal.setAttribute("aria-hidden", "false");
+    }
+  });
 </script>
+
+
 
 </body>
 </html>
